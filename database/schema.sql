@@ -1,3 +1,6 @@
+CREATE DATABASE restaurant_reservation;
+USE restaurant_reservation;
+
 -- Categories for restaurant types (Italian, American, etc.)
 CREATE TABLE Categories (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
