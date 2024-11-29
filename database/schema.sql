@@ -1,3 +1,9 @@
+-- Categories for restaurant types (Italian, American, etc.)
+CREATE TABLE Categories (
+    category_id INT AUTO_INCREMENT PRIMARY KEY,
+    category_name VARCHAR(50) NOT NULL
+);
+
 --table for user tables
 CREATE TABLE Users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -73,18 +79,13 @@ CREATE TABLE Reviews (
     review_id INT AUTO_INCREMENT PRIMARY KEY,
     customer_id INT NOT NULL,
     restaurant_id INT NOT NULL,
-    rating INT NOT NULL CHECK (rating BETWEEN 1 AND 5)
+    rating INT NOT NULL CHECK (rating BETWEEN 1 AND 5),
     review_text TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (customer_id) REFERENCES Customers(customer_id),
     FOREIGN KEY (restaurant_id) REFERENCES Restaurants(restaurant_id)
 );
 
--- Categories for restaurant types (Italian, American, etc.)
-CREATE TABLE Categories (
-    category_id INT AUTO_INCREMENT PRIMARY KEY,
-    category_name VARCHAR(50) NOT NULL
-);
 
 --ReservationHistory table for storing customer's past reservations
 CREATE TABLE ReservationHistory (
