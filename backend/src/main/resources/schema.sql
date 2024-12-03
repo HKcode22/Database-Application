@@ -1,13 +1,25 @@
+DROP DATABASE IF EXISTS restaurant_reservation;
 CREATE DATABASE restaurant_reservation;
 USE restaurant_reservation;
 
--- Categories for restaurant types (Italian, American, etc.)
+DROP TABLE IF EXISTS Notifications;
+DROP TABLE IF EXISTS ReservationHistory;
+DROP TABLE IF EXISTS Reviews;
+DROP TABLE IF EXISTS Menus;
+DROP TABLE IF EXISTS Tables;
+DROP TABLE IF EXISTS Reservations;
+DROP TABLE IF EXISTS Restaurants;
+DROP TABLE IF EXISTS Customers;
+DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS Categories;
+
+/*Categories for restaurant types (Italian, American, etc.)*/
 CREATE TABLE Categories (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
     category_name VARCHAR(50) NOT NULL
 );
 
---table for user tables
+/*table for user tables*/
 CREATE TABLE Users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(100) NOT NULL UNIQUE,
@@ -16,7 +28,7 @@ CREATE TABLE Users (
     last_login_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
---Customers table (linked with Users)
+/*Customers table (linked with Users)*/
 CREATE TABLE Customers (
     customer_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -26,7 +38,7 @@ CREATE TABLE Customers (
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
---Restaurants table (linked with Users)
+/*Restaurants table (linked with Users)*/
 CREATE TABLE Restaurants (
     restaurant_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -44,7 +56,7 @@ CREATE TABLE Restaurants (
     FOREIGN KEY (category_id) REFERENCES Categories(category_id)
 );
 
---Reservations table
+/*Reservations table*/
 CREATE TABLE Reservations (
     reservation_id INT AUTO_INCREMENT PRIMARY KEY,
     customer_id INT NOT NULL,
@@ -58,7 +70,7 @@ CREATE TABLE Reservations (
     FOREIGN KEY (restaurant_id) REFERENCES Restaurants(restaurant_id)
 );
 
---Tables table for managing seating capacity and availability
+/*Tables table for managing seating capacity and availability*/
 CREATE TABLE Tables (
     table_id INT AUTO_INCREMENT PRIMARY KEY,
     restaurant_id INT NOT NULL,
@@ -67,7 +79,7 @@ CREATE TABLE Tables (
     FOREIGN KEY (restaurant_id) REFERENCES Restaurants(restaurant_id)
 );
 
---Menus table for restaurant menu 
+/*Menus table for restaurant menu*/ 
 CREATE TABLE Menus (
     menu_id INT AUTO_INCREMENT PRIMARY KEY,
     restaurant_id INT NOT NULL,
@@ -77,7 +89,7 @@ CREATE TABLE Menus (
     FOREIGN KEY (restaurant_id) REFERENCES Restaurants(restaurant_id)
 );
 
---Reviews table for customer reviews of restaurants (ensures only 1-5 for the stars)
+/*Reviews table for customer reviews of restaurants (ensures only 1-5 for the stars)*/
 CREATE TABLE Reviews (
     review_id INT AUTO_INCREMENT PRIMARY KEY,
     customer_id INT NOT NULL,
@@ -90,7 +102,7 @@ CREATE TABLE Reviews (
 );
 
 
---ReservationHistory table for storing customer's past reservations
+/*ReservationHistory table for storing customer's past reservations*/
 CREATE TABLE ReservationHistory (
     history_id INT AUTO_INCREMENT PRIMARY KEY,
     customer_id INT NOT NULL,
@@ -99,7 +111,7 @@ CREATE TABLE ReservationHistory (
     FOREIGN KEY (reservation_id) REFERENCES Reservations(reservation_id)
 );
 
--- Notifications table for alerting users (customers/restaurants)
+/* Notifications table for alerting users (customers/restaurants)*/
 CREATE TABLE Notifications (
     notification_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
