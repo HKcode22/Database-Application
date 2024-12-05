@@ -7,7 +7,7 @@ import Register from './pages/Register';
 import RestaurantSearch from './pages/RestaurantSearch';
 import Reservation from './pages/Reservation';
 import Profile from './pages/Profile';
-// import Test from './pages/Test';
+import Test from './pages/Test';
 import ViewReservations from './pages/ViewReservations';
 
 
@@ -20,8 +20,8 @@ function App() {
             path="/"
             element={
               <div>
-                <Home />
                 <Navbar />
+                <Home />
               </div>
             }
           />

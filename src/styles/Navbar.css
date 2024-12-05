@@ -1,26 +1,33 @@
 /* src/components/Navbar.css */
 .navbar {
-    text-align: center;
-    margin-top: 20px;
-  }
-  
-  .navbar-links {
-    list-style: none;
-    padding: 0;
-    display: inline-block;
-  }
-  
-  .navbar-links li {
-    display: inline;
-    margin: 0 15px;
-  }
-  
-  .navbar-links a {
-    text-decoration: none;
-    font-size: 18px;
-    color: #333;
-  }
-  
-  .navbar-links a:hover {
-    color: #007bff;
-  }
+  position: fixed;
+  text-align: center;
+  padding: 10px; /* Adjust this if you need spacing */
+  background-color: #f8f9fa; /* Optional for visual clarity */
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; 
+}
+
+.navbar-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+}
+
+.navbar-links li {
+  display: inline;
+  margin: 0 15px;
+}
+
+.navbar-links a {
+  text-decoration: none;
+  font-size: 18px;
+  color: #333;
+}
+
+.navbar-links a:hover {
+  color: #007bff;
+}
