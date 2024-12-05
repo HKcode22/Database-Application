@@ -36,7 +36,7 @@ public class User {
 
     public void setUserId(int userId) {
         this.userId = userId;
-    }
+    }  
 
     public String getEmail() {
         return email;

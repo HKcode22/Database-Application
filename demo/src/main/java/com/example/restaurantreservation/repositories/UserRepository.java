@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-
+/* 
     // Find a user by email using native SQL
     @Query(value = "SELECT * FROM users WHERE email = :email", nativeQuery = true)
     User findUserByEmail(String email);
@@ -23,8 +23,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     // Add a new user using native SQL
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO users (email, password, name, phone_number, role) VALUES (:email, :password, :name, :phoneNumber, :role)", nativeQuery = true)
-    void addUser(String email, String password, String name, String phoneNumber, String role);
+    @Query(value = "INSERT INTO users (email, password, role) VALUES (:email, :password, :role)", nativeQuery = true)
+    void addUser(String email, String password, Enum role);
 
     // Update user using native SQL
     @Modifying
@@ -37,4 +37,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Transactional
     @Query(value = "DELETE FROM users WHERE email = :email", nativeQuery = true)
     void deleteUser(String email);
+    */
 }

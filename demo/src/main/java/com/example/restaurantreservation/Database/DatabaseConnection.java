@@ -5,8 +5,8 @@ import java.sql.SQLException;
 
 public class DatabaseConnection {
     private static final String URL = "jdbc:mysql://localhost:3306/restaurant_reservation";
-    private static final String USER = System.getenv("DB_USER");  //Check README.md file
-    private static final String PASSWORD = System.getenv("DB_PASSWORD");  //Check README.md file
+    private static final String USER = System.getenv("root");  //Check README.md file
+    private static final String PASSWORD = System.getenv("keyan621");  //Check README.md file
 
     public static Connection getConnection() throws SQLException {
         try {

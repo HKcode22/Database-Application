@@ -28,17 +28,13 @@ public class UserController {
 
     //Register a restaurant user
     @PostMapping("/register/restaurant")
-    public ResponseEntity<String> registerRestaurant(@RequestParam String email, 
-                                                     @RequestParam String password, 
-                                                     @RequestParam String restaurantName, 
-                                                     @RequestParam String address, 
-                                                     @RequestParam String category) {
-        boolean success = userService.registerUser(email, password, restaurantName, address, category);
+    public ResponseEntity<String> registerRestaurant(@RequestBody User user) {
+        boolean success = userService.registerUser(user);
         return success ? 
                new ResponseEntity<>("Restaurant registered successfully", HttpStatus.CREATED) : 
-               new ResponseEntity<>("Error registering restaurant", HttpStatus.BAD_REQUEST);
+               new ResponseEntity<>("Error registering customer", HttpStatus.BAD_REQUEST);
     }
-
+/* 
     //Login
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestParam String email, @RequestParam String password) {
@@ -53,4 +49,5 @@ public class UserController {
     public ResponseEntity<String> logout() {
         return new ResponseEntity<>("Logout successful", HttpStatus.OK);
     }
+    */
 }
