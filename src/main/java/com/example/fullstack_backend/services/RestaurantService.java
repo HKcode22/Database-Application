@@ -1,6 +1,7 @@
 package com.example.fullstack_backend.services;
 
 import com.example.fullstack_backend.model.Restaurant;
+import dto.RestaurantDTO;
 import com.example.fullstack_backend.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,9 +25,19 @@ public class RestaurantService {
     }
 
     // Add new restaurant using SQL
-    public Restaurant addRestaurant(Restaurant restaurant) {
-        restaurantRepository.addRestaurant(restaurant.getName(), (restaurant.getStreetAddress() + restaurant.getCity()+ restaurant.getState()+ restaurant.getZipCode()), restaurant.getCategoryId());
-        return restaurant;
+    public void addRestaurant(RestaurantDTO restaurantDTO) {
+        restaurantRepository.addRestaurant(
+                restaurantDTO.getUserId(),
+                restaurantDTO.getName(),
+                restaurantDTO.getEmail(),
+                restaurantDTO.getStreetAddress(),
+                restaurantDTO.getCity(),
+                restaurantDTO.getState(),
+                restaurantDTO.getZipCode(),
+                restaurantDTO.getCategoryId(),
+                restaurantDTO.getPhoneNumber(),
+                restaurantDTO.getOpeningHours()
+        );
     }
 
     public Restaurant getRestaurantDetails(int restaurantId) {

@@ -2,6 +2,7 @@ package com.example.fullstack_backend.repository;
 
 import com.example.fullstack_backend.model.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -12,6 +13,7 @@ import jakarta.transaction.Transactional;
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
     // Add a new customer
+    @Modifying
     @Transactional
     @Query(value = "INSERT INTO Customers (user_id, name, phone_number, created_at) " +
             "VALUES (:userId, :name, :phoneNumber, CURRENT_TIMESTAMP)", nativeQuery = true)

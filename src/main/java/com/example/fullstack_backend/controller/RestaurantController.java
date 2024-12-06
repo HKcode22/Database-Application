@@ -1,11 +1,13 @@
 package com.example.fullstack_backend.controller;
 
 import com.example.fullstack_backend.model.Restaurant;
+import dto.RestaurantDTO;
 import com.example.fullstack_backend.services.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
@@ -36,14 +38,14 @@ public class RestaurantController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    // Add a new restaurant
     @PostMapping("/add")
-    public ResponseEntity<String> addRestaurant(@RequestBody Restaurant restaurant) {
-        Restaurant addedRestaurant = restaurantService.addRestaurant(restaurant);
-        if (addedRestaurant != null) {
+    public ResponseEntity<String> addRestaurant(@RequestBody RestaurantDTO restaurantDTO) {
+        try {
+            restaurantService.addRestaurant(restaurantDTO);
             return new ResponseEntity<>("Restaurant added successfully", HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error adding restaurant: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("Failed to add restaurant", HttpStatus.BAD_REQUEST);
     }
 
     // Update restaurant details

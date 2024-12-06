@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.query.Param;
 
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -18,23 +19,38 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
 
     // Get restaurant by ID using native SQL
     @Query(value = "SELECT * FROM Restaurants WHERE restaurant_id = :id", nativeQuery = true)
-    Restaurant findRestaurantById(int id);
+    Restaurant findRestaurantById(@Param("id") int id);
 
-    // Add new restaurant using native SQL
+    // Add a new restaurant using native SQL
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO Restaurants (name, street_address, city, state, zip_code, category_id) VALUES (:name, :streetaddress, :city, :state, :zip_code, :categoryId)", nativeQuery = true)
-    void addRestaurant(String name, String streetAddress, int categoryId);
+    @Query(value = "INSERT INTO Restaurants (user_id, name, email, street_address, city, state, zip_code, category_id, phone_number, opening_hours) VALUES " +
+            "(:user_id, :name, :email, :street_address, :city, :state, :zip_code, :category_id, :phone_number, :opening_hours)", nativeQuery = true)
+    void addRestaurant(@Param("user_id") int userId,
+                       @Param("name") String name,
+                       @Param("email") String email,
+                       @Param("street_address") String streetAddress,
+                       @Param("city") String city,
+                       @Param("state") String state,
+                       @Param("zip_code") String zipCode,
+                       @Param("category_id") Integer categoryId,
+                       @Param("phone_number") String phoneNumber,
+                       @Param("opening_hours") String openingHours);
 
     // Update restaurant using native SQL
     @Modifying
     @Transactional
     @Query(value = "UPDATE Restaurants SET name = :name, street_address = :streetAddress, city = :city, state = :state, zip_code = :zip_code WHERE restaurant_id = :restaurantId", nativeQuery = true)
-    int updateRestaurant(int restaurantId, String name, String streetAddress, String city, String state, String zip_code);
+    int updateRestaurant(@Param("restaurantId") int restaurantId,
+                         @Param("name") String name,
+                         @Param("streetAddress") String streetAddress,
+                         @Param("city") String city,
+                         @Param("state") String state,
+                         @Param("zip_code") String zipCode);
 
     // Delete restaurant using native SQL
     @Modifying
     @Transactional
     @Query(value = "DELETE FROM Restaurants WHERE restaurant_id = :restaurantId", nativeQuery = true)
-    void deleteRestaurant(int restaurantId);
+    void deleteRestaurant(@Param("restaurantId") int restaurantId);
 }

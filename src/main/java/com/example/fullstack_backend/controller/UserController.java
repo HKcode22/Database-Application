@@ -14,11 +14,25 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // Register a customer
+    // Register a customer or restaurant admin
     @PostMapping("/register")
     public ResponseEntity<String> registerCustomer(@RequestBody UserDTO userDTO) {
-        if (userService.registerUser(userDTO.getEmail(), userDTO.getPassword(), userDTO.getRole())) {
-            return new ResponseEntity<>("Customer registered successfully", HttpStatus.CREATED);
+        boolean registered = userService.registerUser(
+                userDTO.getEmail(),
+                userDTO.getPassword(),
+                userDTO.getRole(),
+                userDTO.getName(),
+                userDTO.getPhoneNumber(),
+                userDTO.getStreetAddress(),
+                userDTO.getCity(),
+                userDTO.getState(),
+                userDTO.getZipCode(),
+                userDTO.getCategoryId(),
+                userDTO.getOpeningHours()
+        );
+
+        if (registered) {
+            return new ResponseEntity<>("registered successfully", HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>("Error registering customer: Email already taken", HttpStatus.BAD_REQUEST);
         }

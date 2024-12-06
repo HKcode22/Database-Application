@@ -1,46 +1,24 @@
 package dto;
 
-public class UserDTO {
-
-    private String email;
-    private String password;
-    private String role;
+public class RestaurantDTO {
+    private int userId;
     private String name;
-    private String phoneNumber;
+    private String email;
     private String streetAddress;
     private String city;
     private String state;
     private String zipCode;
     private Integer categoryId;
+    private String phoneNumber;
     private String openingHours;
 
-    // Default constructor
-    public UserDTO() {}
-
     // Getters and setters
-
-    public String getEmail() {
-        return email;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getName() {
@@ -51,12 +29,12 @@ public class UserDTO {
         this.name = name;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getStreetAddress() {
@@ -99,19 +77,19 @@ public class UserDTO {
         this.categoryId = categoryId;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public String getOpeningHours() {
         return openingHours;
     }
 
     public void setOpeningHours(String openingHours) {
         this.openingHours = openingHours;
-    }
-
-    @Override
-    public String toString() {
-        return "UserDTO{" +
-                "email='" + email + '\'' +
-                ", role='" + role + '\'' +
-                '}';
     }
 }
