@@ -1,6 +1,7 @@
 package com.example.fullstack_backend.repository;
 
 import com.example.fullstack_backend.model.Restaurant;
+import dto.RestaurantDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -24,18 +25,11 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
     // Add a new restaurant using native SQL
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO Restaurants (user_id, name, email, street_address, city, state, zip_code, category_id, phone_number, opening_hours) VALUES " +
-            "(:user_id, :name, :email, :street_address, :city, :state, :zip_code, :category_id, :phone_number, :opening_hours)", nativeQuery = true)
-    void addRestaurant(@Param("user_id") int userId,
-                       @Param("name") String name,
-                       @Param("email") String email,
-                       @Param("street_address") String streetAddress,
-                       @Param("city") String city,
-                       @Param("state") String state,
-                       @Param("zip_code") String zipCode,
-                       @Param("category_id") Integer categoryId,
-                       @Param("phone_number") String phoneNumber,
-                       @Param("opening_hours") String openingHours);
+    @Query(value = "INSERT INTO Restaurants (user_id, name, email, street_address, city, state, zip_code, category_id, phone_number, opening_hours) " +
+            "VALUES (:#{#restaurant.userId}, :#{#restaurant.name}, :#{#restaurant.email}, :#{#restaurant.streetAddress}, " +
+            ":#{#restaurant.city}, :#{#restaurant.state}, :#{#restaurant.zipCode}, :#{#restaurant.categoryId}, " +
+            ":#{#restaurant.phoneNumber}, :#{#restaurant.openingHours})", nativeQuery = true)
+    void addRestaurant(@Param("restaurant") RestaurantDTO restaurantDTO);
 
     // Update restaurant using native SQL
     @Modifying

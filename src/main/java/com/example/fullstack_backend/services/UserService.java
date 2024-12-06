@@ -34,7 +34,7 @@ public class UserService {
         User user = new User();
         user.setEmail(email);
         user.setPassword(password); // Ideally, hash the password before saving
-        user.setRole(User.Role.valueOf(role.toLowerCase())); // Use lowercase to match enum
+        user.setRole(mapRole(role)); // Map role to enum value
         User savedUser = userRepository.save(user);
 
         // Add to the appropriate table based on the role
@@ -42,7 +42,7 @@ public class UserService {
             // Add customer details
             customerRepository.addCustomer(savedUser.getUserId(), name, phoneNumber);
         } else if (role.equalsIgnoreCase("restaurant_admin")) {
-            // Add restaurant details
+            // Add restaurant details using DTO
             RestaurantDTO restaurantDTO = new RestaurantDTO();
             restaurantDTO.setUserId(savedUser.getUserId());
             restaurantDTO.setName(name);
@@ -54,23 +54,26 @@ public class UserService {
             restaurantDTO.setCategoryId(categoryId);
             restaurantDTO.setPhoneNumber(phoneNumber);
             restaurantDTO.setOpeningHours(openingHours);
-            restaurantRepository.addRestaurant(
-                    restaurantDTO.getUserId(),
-                    restaurantDTO.getName(),
-                    restaurantDTO.getEmail(),
-                    restaurantDTO.getStreetAddress(),
-                    restaurantDTO.getCity(),
-                    restaurantDTO.getState(),
-                    restaurantDTO.getZipCode(),
-                    restaurantDTO.getCategoryId(),
-                    restaurantDTO.getPhoneNumber(),
-                    restaurantDTO.getOpeningHours()
-            );
+
+            // Use repository to add the restaurant
+            restaurantRepository.addRestaurant(restaurantDTO);
         } else {
             throw new IllegalArgumentException("Invalid role: " + role);
         }
 
         return true;
+    }
+
+    // Helper function to map the role string to User.Role enum
+    private User.Role mapRole(String role) {
+        switch (role.toLowerCase()) {
+            case "customer":
+                return User.Role.customer;
+            case "restaurant_admin":
+                return User.Role.restaurant_admin;
+            default:
+                throw new IllegalArgumentException("Invalid role: " + role);
+        }
     }
 
     // Login logic (This is just an example, ensure you have proper login verification)

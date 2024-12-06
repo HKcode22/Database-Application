@@ -40,20 +40,20 @@ CREATE TABLE Customers (
 
 /*Restaurants table (linked with Users)*/
 CREATE TABLE Restaurants (
-    restaurant_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    name VARCHAR(100),
-    email VARCHAR(100),
-    street_address VARCHAR(255),
-    city VARCHAR(100),
-    state VARCHAR(100),
-    zip_code VARCHAR(10),
-    category_id INT,
-    phone_number VARCHAR(15),
-    opening_hours VARCHAR(100),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id),
-    FOREIGN KEY (category_id) REFERENCES Categories(category_id)
+     restaurant_id INT AUTO_INCREMENT PRIMARY KEY,
+     user_id INT NOT NULL,
+     name VARCHAR(100) NOT NULL,
+     email VARCHAR(100) NOT NULL,
+     street_address VARCHAR(255) NOT NULL,
+     city VARCHAR(100) NOT NULL,
+     state VARCHAR(100) NOT NULL,
+     zip_code VARCHAR(10) NOT NULL,
+     category_id INT,
+     phone_number VARCHAR(15) NOT NULL,
+     opening_hours VARCHAR(100) NOT NULL,
+     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     FOREIGN KEY (user_id) REFERENCES Users(user_id),
+     FOREIGN KEY (category_id) REFERENCES Categories(category_id)
 );
 
 /*Reservations table*/

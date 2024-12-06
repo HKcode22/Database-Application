@@ -26,20 +26,10 @@ public class RestaurantService {
 
     // Add new restaurant using SQL
     public void addRestaurant(RestaurantDTO restaurantDTO) {
-        restaurantRepository.addRestaurant(
-                restaurantDTO.getUserId(),
-                restaurantDTO.getName(),
-                restaurantDTO.getEmail(),
-                restaurantDTO.getStreetAddress(),
-                restaurantDTO.getCity(),
-                restaurantDTO.getState(),
-                restaurantDTO.getZipCode(),
-                restaurantDTO.getCategoryId(),
-                restaurantDTO.getPhoneNumber(),
-                restaurantDTO.getOpeningHours()
-        );
+        restaurantRepository.addRestaurant(restaurantDTO);
     }
 
+    // Get restaurant details by ID
     public Restaurant getRestaurantDetails(int restaurantId) {
         return restaurantRepository.findRestaurantById(restaurantId);
     }
