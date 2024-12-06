@@ -26,7 +26,7 @@ public class User {
     private Timestamp lastLoginTime;
 
     public enum Role {
-        CUSTOMER, RESTAURANT_ADMIN
+        customer, restaurant_admin
     }
 
     // Getters and setters
