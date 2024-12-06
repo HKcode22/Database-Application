@@ -41,7 +41,7 @@ function Reservation() {
           <input type="number" value={partySize} onChange={(e) => setPartySize(e.target.value)} required min="1" />
         </div>
         <button type="submit">Reserve</button>
-        <button type="view">View Reddservation</button>
+        <button type="view">View Reservation</button>
 
       </form>
     </div>
