@@ -78,8 +78,11 @@ public class UserService {
 
     // Login logic (This is just an example, ensure you have proper login verification)
     public boolean login(String email, String password) {
-        // Implement actual login logic, such as comparing hashed passwords
-        return userRepository.findUserByEmail(email) != null;
+        User user = userRepository.findUserByEmail(email);
+        if (user == null) {
+            return false;
+        }
+        return user.getPassword().equals(password);
     }
 
     // Update user (using the update query in UserRepository)
