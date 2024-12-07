@@ -25,6 +25,8 @@ function App() {
               </div>
             }
           />
+          <Route path="/search" component={RestaurantSearch} />
+          <Route path="/reserve/:restaurantId" element={<Reservation />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/restaurants" element={<RestaurantSearch />} />
