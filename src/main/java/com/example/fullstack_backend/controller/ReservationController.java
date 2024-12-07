@@ -1,11 +1,13 @@
 package com.example.fullstack_backend.controller;
 
+import com.example.fullstack_backend.model.Reservation;
 import com.example.fullstack_backend.services.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -43,13 +45,16 @@ public class ReservationController {
 
     //View customer's reservations
     @GetMapping("/{customerId}")
-    public ResponseEntity<String> viewReservations(@PathVariable int customerId) {
-        String reservations = reservationService.getReservationsByCustomerId(customerId).toString();
+    public ResponseEntity<?> viewReservations(@PathVariable int customerId) {
+        List<Reservation> reservations = reservationService.getReservationsByCustomerId(customerId);
+
         if (reservations != null && !reservations.isEmpty()) {
             return new ResponseEntity<>(reservations, HttpStatus.OK);
         }
+
         return new ResponseEntity<>("No reservations found", HttpStatus.NOT_FOUND);
     }
+
 
     //Modify a reservation
     @PutMapping("/{reservationId}/modify")

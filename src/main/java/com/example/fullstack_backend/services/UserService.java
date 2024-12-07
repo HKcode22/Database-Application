@@ -77,12 +77,12 @@ public class UserService {
     }
 
     // Login logic (This is just an example, ensure you have proper login verification)
-    public boolean login(String email, String password) {
+    public User login(String email, String password) {
         User user = userRepository.findUserByEmail(email);
-        if (user == null) {
-            return false;
+        if (user == null || !user.getPassword().equals(password)) {
+            return null;  // Return null if user is not found or password does not match
         }
-        return user.getPassword().equals(password);
+        return user;  // Return the user object if login is successful
     }
 
     // Update user (using the update query in UserRepository)

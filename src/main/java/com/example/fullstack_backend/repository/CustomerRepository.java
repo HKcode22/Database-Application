@@ -1,6 +1,7 @@
 package com.example.fullstack_backend.repository;
 
 import com.example.fullstack_backend.model.Customer;
+import com.example.fullstack_backend.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -46,4 +47,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
     // Find customer by userId
     @Query(value = "SELECT * FROM Customers WHERE user_id = :userId", nativeQuery = true)
     Optional<Customer> findCustomerByUserId(@Param("userId") int userId);
+
+    Customer findByUser(User user);
 }
