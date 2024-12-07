@@ -32,14 +32,17 @@ public class CustomerController {
     // Update an existing customer
     @PutMapping("/{customerId}")
     public ResponseEntity<String> updateCustomer(@PathVariable int customerId,
-                                                 @RequestParam String name,
-                                                 @RequestParam String phoneNumber) {
+                                                 @RequestBody Customer updatedCustomer) {
         if (!customerRepository.existsById(customerId)) {
             return new ResponseEntity<>("Customer not found", HttpStatus.NOT_FOUND);
         }
 
         try {
-            int rowsUpdated = customerRepository.updateCustomer(customerId, name, phoneNumber);
+            int rowsUpdated = customerRepository.updateCustomer(
+                    customerId,
+                    updatedCustomer.getName(),
+                    updatedCustomer.getPhoneNumber()
+            );
             if (rowsUpdated > 0) {
                 return new ResponseEntity<>("Customer updated successfully", HttpStatus.OK);
             } else {
@@ -53,14 +56,18 @@ public class CustomerController {
     // Get customer profile by userId
     @GetMapping("/profile")
     public ResponseEntity<Customer> getCustomerProfile(@RequestParam int userId) {
-        // Assuming your CustomerRepository has a method to find a customer by userId
-        Optional<Customer> customerOpt = customerRepository.findById(userId);
+        try {
+            // Assuming your repository has a method to fetch customer by userId
+            Optional<Customer> customerOpt = customerRepository.findCustomerByUserId(userId);
 
-        if (!customerOpt.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);  // Customer not found
+            if (!customerOpt.isPresent()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Customer not found
+            }
+
+            return new ResponseEntity<>(customerOpt.get(), HttpStatus.OK); // Return the customer data
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        return new ResponseEntity<>(customerOpt.get(), HttpStatus.OK);  // Return the customer data
     }
 
     // Delete a customer
@@ -72,9 +79,9 @@ public class CustomerController {
 
         try {
             customerRepository.deleteCustomer(customerId);
-            return new ResponseEntity<>("Customer deleted successfully", HttpStatus.OK);
+            return ResponseEntity.ok("Customer deleted successfully");
         } catch (Exception e) {
-            return new ResponseEntity<>("Error deleting customer: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting customer: " + e.getMessage());
         }
     }
 }
