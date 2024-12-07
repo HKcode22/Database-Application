@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
@@ -7,24 +7,42 @@ function Reservation() {
   const { restaurantId } = useParams(); // Fetch restaurantId from the route
   const { state } = useLocation(); // Access state passed from navigate
   const restaurantName = state?.restaurantName || 'Unknown Restaurant'; // Fallback in case state is missing
+
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [partySize, setPartySize] = useState(1);
-  const [customerId, setCustomerId] = useState(''); // For customerId
+  const [customerId, setCustomerId] = useState(''); // State to store customerId
+
+  // Effect hook to retrieve customerId from sessionStorage (or any other source)
+  useEffect(() => {
+    const storedCustomer = sessionStorage.getItem('customer');
+    if (storedCustomer) {
+      setCustomerId(JSON.parse(storedCustomer)); // Assuming customer ID is stored as a JSON string
+    } else {
+      // Handle the case where no customer is logged in
+      alert("No customer logged in.");
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
+    // Ensure customerId is valid before submitting the reservation
+    if (!customerId) {
+      alert("Customer ID is missing. Please log in.");
+      return;
+    }
+
     const payload = {
-      customerId: 1, // Hardcoded for now, replace with actual customer ID
+      customerId: parseInt(customerId, 10), // Use the retrieved customerId
       restaurantId: parseInt(restaurantId, 10), // Ensure restaurantId is an integer
       reservationDate: date,
       reservationTime: `${time}:00`, // Append seconds to match HH:mm:ss format
       partySize: parseInt(partySize, 10), // Ensure partySize is an integer
     };
-  
+
     console.log("Payload:", payload); // Debugging log
-  
+
     try {
       const response = await axios.post('http://localhost:8080/api/reservations/create', payload);
       console.log('Reservation successful', response.data);
@@ -35,8 +53,6 @@ function Reservation() {
       alert("Failed to create reservation. Please try again.");
     }
   };
-  
-  
 
   return (
     <div className="center-container">
@@ -56,8 +72,7 @@ function Reservation() {
           <input
             type="text"
             value={customerId}
-            onChange={(e) => setCustomerId(e.target.value)}
-            required
+            readOnly
           />
         </div>
         <div>

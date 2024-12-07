@@ -15,7 +15,7 @@ function Profile() {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const storedUser = sessionStorage.getItem('user');
+      const storedUser = sessionStorage.getItem('user'); // Updated to use 'user' key
       if (storedUser) {
         const parsedUser = JSON.parse(storedUser);
         setUser(parsedUser);
@@ -52,7 +52,7 @@ function Profile() {
       alert('Account updated successfully!');
       // Update session storage and user state
       const updatedUser = { ...user, email, phoneNumber };
-      sessionStorage.setItem('user', JSON.stringify(updatedUser));
+      sessionStorage.setItem('user', JSON.stringify(updatedUser)); // Updated to 'user' key
       setUser(updatedUser);
       setEditMode(false);
     } catch (error) {
@@ -62,7 +62,7 @@ function Profile() {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem('user');
+    sessionStorage.removeItem('user'); // Updated to 'user' key
     alert('You have been logged out.');
     navigate('/login'); // Redirect to login page
   };
@@ -78,7 +78,7 @@ function Profile() {
 
     try {
       await axios.delete(`http://localhost:8080/api/customers/${user.customerId}`);
-      sessionStorage.removeItem('user');
+      sessionStorage.removeItem('user'); // Updated to 'user' key
       alert('Account deleted successfully.');
       navigate('/register'); // Redirect to registration page
     } catch (error) {

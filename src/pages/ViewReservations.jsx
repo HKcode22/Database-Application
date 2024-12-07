@@ -7,22 +7,36 @@ function ViewReservations() {
   const [reservations, setReservations] = useState([]);
   const [error, setError] = useState('');
 
-  // Fetch the user's reservations on component mount
+  // Function to format the reservation date
+  const formatDate = (dateArray) => {
+    return `${dateArray[0]}-${dateArray[1].toString().padStart(2, '0')}-${dateArray[2].toString().padStart(2, '0')}`;
+  };
+
+  // Function to format the reservation time
+  const formatTime = (timeArray) => {
+    return `${timeArray[0].toString().padStart(2, '0')}:${timeArray[1].toString().padStart(2, '0')}`;
+  };
+
   useEffect(() => {
     const fetchReservations = async () => {
-      const storedUser = sessionStorage.getItem('user');
-      if (storedUser) {
-        const user = JSON.parse(storedUser);  // Parse the stored user data
+      const storedCustomer = sessionStorage.getItem('customer'); // Ensure 'customer' key is used
+      if (storedCustomer) {
+        const customerId = JSON.parse(storedCustomer); // Parse stored customer ID
 
         try {
-          const response = await axios.get(`http://localhost:8080/api/reservations/${user.userId}`);
-          setReservations(response.data);
+          const response = await axios.get(`http://localhost:8080/api/reservations/${customerId}`);
+          
+          if (response.status === 200 && response.data.length > 0) {
+            setReservations(response.data); // Store reservations list directly
+          } else {
+            setError('No reservations found');
+          }
         } catch (error) {
           console.error('Error fetching reservations:', error);
           setError('Failed to load reservations');
         }
       } else {
-        setError('No user logged in');
+        setError('No customer logged in');
       }
     };
 
@@ -50,7 +64,7 @@ function ViewReservations() {
                 <Paper key={reservation.reservationId} elevation={3} style={{ margin: '10px', padding: '10px' }}>
                   <ListItem>
                     <ListItemText
-                      primary={`Reservation at ${reservation.restaurant.name} on ${reservation.reservationDate} at ${reservation.reservationTime}`}
+                      primary={`Reservation at ${reservation.restaurant.name} on ${formatDate(reservation.reservationDate)} at ${formatTime(reservation.reservationTime)}`}
                       secondary={`Party Size: ${reservation.partySize} | Status: ${reservation.status}`}
                     />
                   </ListItem>

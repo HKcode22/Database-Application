@@ -4,10 +4,10 @@ import '../styles/Navbar.css';
 
 function Navbar() {
   const navigate = useNavigate();
-  const user = JSON.parse(sessionStorage.getItem('user')); 
+  const user = JSON.parse(sessionStorage.getItem('customer')); 
 
   const handleLogout = () => {
-    sessionStorage.removeItem('user'); 
+    sessionStorage.removeItem('customer'); 
     navigate('/login');
   };
 
