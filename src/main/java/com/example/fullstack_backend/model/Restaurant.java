@@ -17,34 +17,34 @@ public class Restaurant {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id", nullable = true)
     private Category category;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "street_address")
+    @Column(name = "street_address", nullable = false)
     private String streetAddress;
 
-    @Column(name = "city")
+    @Column(name = "city", nullable = false)
     private String city;
 
-    @Column(name = "state")
+    @Column(name = "state", nullable = false)
     private String state;
 
-    @Column(name = "zip_code")
+    @Column(name = "zip_code", nullable = false)
     private String zipCode;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
-    @Column(name = "opening_hours")
+    @Column(name = "opening_hours", nullable = false)
     private String openingHours;
 
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "created_at", insertable = false, updatable = false)
     private Timestamp createdAt;
 
     // Getters and setters
@@ -66,10 +66,6 @@ public class Restaurant {
 
     public Category getCategory() {
         return category;
-    }
-
-    public int getCategoryId() {
-        return category.getCategoryId();
     }
 
     public void setCategory(Category category) {
@@ -142,9 +138,5 @@ public class Restaurant {
 
     public Timestamp getCreatedAt() {
         return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
     }
 }

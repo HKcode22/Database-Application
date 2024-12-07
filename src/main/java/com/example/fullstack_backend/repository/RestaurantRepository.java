@@ -42,6 +42,18 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
                          @Param("state") String state,
                          @Param("zip_code") String zipCode);
 
+    @Query(value = "SELECT r.restaurant_id, r.name, r.email, r.street_address, r.city, r.state, r.zip_code, " +
+            "r.phone_number, r.opening_hours, c.category_name " +
+            "FROM Restaurants r " +
+            "LEFT JOIN Categories c ON r.category_id = c.category_id " +
+            "WHERE (:location IS NULL OR LOWER(r.city) LIKE :location OR LOWER(r.street_address) LIKE :location OR LOWER(r.state) LIKE :location) " +
+            "AND (:category IS NULL OR LOWER(c.category_name) LIKE :category) " +
+            "AND (:name IS NULL OR LOWER(r.name) LIKE :name)",
+            nativeQuery = true)
+    List<Object[]> findRestaurantsBySearchCriteria(@Param("location") String location,
+                                                   @Param("category") String category,
+                                                   @Param("name") String name);
+
     // Delete restaurant using native SQL
     @Modifying
     @Transactional
