@@ -1,71 +1,154 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
+import { useNavigate } from 'react-router-dom';
 import { Typography } from '@mui/material';
+
 function Profile() {
-  const [reservations, setReservations] = useState([]);
-  const [user, setUser] = useState(null); // To hold user details (if needed)
+  const [user, setUser] = useState(null); // To hold user details
+  const [editMode, setEditMode] = useState(false); // To toggle edit mode
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  // Fetch user profile and reservations when the component mounts
   useEffect(() => {
-    const fetchProfile = async (customerId) => {
-      try {
-        // Assume there's an API endpoint that fetches the current user's profile
-        const userResponse = await axios.get('http://localhost:8080/api/customers/profile');
-        setUser(userResponse.data);
-
-        // Fetch reservations for the logged-in user
-        const reservationsResponse = await axios.get('http://localhost:8080/api/reservations/${customerId}');
-        setReservations(reservationsResponse.data);
-      } catch (error) {
-        console.error('Error fetching profile data', error);
+    const fetchProfile = async () => {
+      const storedUser = sessionStorage.getItem('user');
+      if (storedUser) {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+        setEmail(parsedUser.email);
+        setPhoneNumber(parsedUser.phoneNumber || ''); // Handle missing phone number gracefully
+      } else {
+        console.error('No user found in session storage');
       }
+      setLoading(false);
     };
+
     fetchProfile();
   }, []);
 
-  // Handle reservation cancellation
-  const cancelReservation = async (reservationId) => {
+  const handleEditToggle = () => {
+    setEditMode(!editMode);
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+
+    if (!user) {
+      alert('User not logged in.');
+      return;
+    }
+
     try {
-      await axios.delete(`http://localhost:8080/api/reservations/${reservationId}`);
-      setReservations(reservations.filter(reservation => reservation.id !== reservationId));
-      alert('Reservation cancelled');
+      const response = await axios.put(`http://localhost:8080/api/customers/${user.customerId}`, {
+        email,
+        password,
+        phoneNumber,
+      });
+
+      alert('Account updated successfully!');
+      // Update session storage and user state
+      const updatedUser = { ...user, email, phoneNumber };
+      sessionStorage.setItem('user', JSON.stringify(updatedUser));
+      setUser(updatedUser);
+      setEditMode(false);
     } catch (error) {
-      console.error('Error cancelling reservation', error);
+      console.error('Error updating account:', error);
+      alert('An error occurred while updating your account. Please try again.');
     }
   };
 
-  if (!user) {
-    return <div> 
-    <Navbar />
-      <Typography sx = {{textAlign: 'center'}}> Not Logged In </Typography>
+  const handleLogout = () => {
+    sessionStorage.removeItem('user');
+    alert('You have been logged out.');
+    navigate('/login'); // Redirect to login page
+  };
+
+  const handleDeleteAccount = async () => {
+    if (!user) {
+      alert('User not logged in.');
+      return;
+    }
+
+    const confirmDelete = window.confirm('Are you sure you want to delete your account? This action cannot be undone.');
+    if (!confirmDelete) return;
+
+    try {
+      await axios.delete(`http://localhost:8080/api/customers/${user.customerId}`);
+      sessionStorage.removeItem('user');
+      alert('Account deleted successfully.');
+      navigate('/register'); // Redirect to registration page
+    } catch (error) {
+      console.error('Error deleting account:', error);
+      alert('An error occurred while deleting your account. Please try again.');
+    }
+  };
+
+  if (loading) {
+    return (
+      <div>
+        <Navbar />
+        <Typography sx={{ textAlign: 'center' }}>Loading...</Typography>
       </div>
-      
+    );
+  }
+
+  if (!user) {
+    return (
+      <div>
+        <Navbar />
+        <Typography sx={{ textAlign: 'center' }}>You are not logged in. Please log in to view your profile.</Typography>
+      </div>
+    );
   }
 
   return (
     <div className="center-container">
-      
+      <Navbar />
       <h2>Profile</h2>
-      <p>Welcome, {user.name}</p>
-      <h3>Your Reservations</h3>
+      <p>Welcome, {user.name || 'User'}</p>
 
-      {reservations.length > 0 ? (
-        <ul>
-          {reservations.map((reservation) => (
-            <li key={reservation.id}>
-              <p>
-                <strong>Restaurant:</strong> {reservation.restaurantName} <br />
-                <strong>Date:</strong> {reservation.date} <br />
-                <strong>Time:</strong> {reservation.time} <br />
-                <strong>Party Size:</strong> {reservation.partySize} <br />
-                <button onClick={() => cancelReservation(reservation.id)}>Cancel Reservation</button>
-              </p>
-            </li>
-          ))}
-        </ul>
+      {!editMode ? (
+        <div>
+          <p><strong>Email:</strong> {user.email}</p>
+          <p><strong>Phone Number:</strong> {user.phoneNumber || 'Not provided'}</p>
+          <button onClick={handleEditToggle}>Edit Account</button>
+          <button onClick={handleLogout}>Logout</button>
+          <button onClick={handleDeleteAccount}>Delete Account</button>
+        </div>
       ) : (
-        <p>You don't have any reservations yet.</p>
+        <form onSubmit={handleUpdate}>
+          <div>
+            <label>Email:</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label>Password:</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <div>
+            <label>Phone Number:</label>
+            <input
+              type="text"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+            />
+          </div>
+          <button type="submit">Update</button>
+          <button type="button" onClick={handleEditToggle}>Cancel</button>
+        </form>
       )}
     </div>
   );
