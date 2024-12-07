@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/reservations")
 public class ReservationController {
@@ -15,17 +17,29 @@ public class ReservationController {
 
     //Create new reservation
     @PostMapping("/create")
-    public ResponseEntity<String> createReservation(@RequestParam int customerId, 
-                                                    @RequestParam int restaurantId, 
-                                                    @RequestParam String reservationDate, 
-                                                    @RequestParam String reservationTime, 
-                                                    @RequestParam int partySize) {
-        boolean success = reservationService.createReservation(customerId, restaurantId, reservationDate, reservationTime, partySize);
-        if (success) {
-            return new ResponseEntity<>("Reservation created successfully", HttpStatus.CREATED);
+    public ResponseEntity<String> createReservation(@RequestBody Map<String, Object> payload) {
+        try {
+            int customerId = (int) payload.get("customerId");
+            int restaurantId = (int) payload.get("restaurantId");
+            String reservationDate = (String) payload.get("reservationDate");
+            String reservationTime = (String) payload.get("reservationTime");
+            int partySize = (int) payload.get("partySize");
+
+            // Debugging: Log payload values
+            System.out.println("Received payload: " + payload);
+
+            boolean success = reservationService.createReservation(customerId, restaurantId, reservationDate, reservationTime, partySize);
+            if (success) {
+                return new ResponseEntity<>("Reservation created successfully", HttpStatus.CREATED);
+            }
+            return new ResponseEntity<>("Error creating reservation", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Invalid request payload", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("Error creating reservation", HttpStatus.BAD_REQUEST);
     }
+
+
 
     //View customer's reservations
     @GetMapping("/{customerId}")
